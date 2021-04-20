@@ -1,20 +1,19 @@
-import 'package:app_finanzas_personales/src/pages/login/login_controller.dart';
+import 'package:app_finanzas_personales/src/pages/register/register_controller.dart';
+import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 import 'package:app_finanzas_personales/src/widgets/button_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  LoginController _con = new LoginController();
-
+class _RegisterPageState extends State<RegisterPage> {
+  RegisterController _con = new RegisterController();
   @override
   void initState() {
     super.initState();
@@ -32,11 +31,11 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             _banerLogin(),
-            _icono(),
+            _textfieldUsername(),
             _textfieldEmail(),
             _textfieldPassword(),
-            _buttonLogin(),
-            _textNoCuenta(),
+            _textfieldConfirmPassword(),
+            _buttonRegister(),
           ],
         ),
       ),
@@ -47,11 +46,11 @@ class _LoginPageState extends State<LoginPage> {
     return ClipPath(
       clipper: WaveClipperOne(),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.25,
+        height: MediaQuery.of(context).size.height * 0.15,
         color: utilscolor.Colors.colorPrimary,
         child: Center(
             child: Text(
-          "Finanzas Personales",
+          "Registro de usuario",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -62,8 +61,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _icono() {
-    return Image.asset('assets/img/icono.png');
+  Widget _textfieldUsername() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: TextField(
+        controller: _con.usernameController,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          hintText: "Nombre y Apellido",
+          labelText: "Nombre de usuario",
+          //prefixIcon -> para posicionar icono a l aizquierda
+          suffixIcon: Icon(
+            Icons.person_outline,
+            color: utilscolor.Colors.colorAccent,
+          ),
+          border: new OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _textfieldEmail() {
@@ -80,12 +97,8 @@ class _LoginPageState extends State<LoginPage> {
             Icons.email_outlined,
             color: utilscolor.Colors.colorAccent,
           ),
-
           border: new OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            borderSide: new BorderSide(
-              color: Colors.teal,
-            ),
           ),
         ),
       ),
@@ -107,52 +120,42 @@ class _LoginPageState extends State<LoginPage> {
           ),
           border: new OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
-            borderSide: new BorderSide(
-              color: Colors.teal,
-            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buttonLogin() {
+  Widget _textfieldConfirmPassword() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
-      child: ButtonApp(
-        onPressed: () {
-          _con.login();
-        },
-        text: "Iniciar sesión",
-        color: utilscolor.Colors.colorAccent,
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: TextField(
+        controller: _con.repeatpasswordController,
+        obscureText: true,
+        decoration: InputDecoration(
+          labelText: "Confirmar contraseña",
+          //prefixIcon -> para posicionar icono a l aizquierda
+          suffixIcon: Icon(
+            Icons.lock_open,
+            color: utilscolor.Colors.colorAccent,
+          ),
+          border: new OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _textNoCuenta() {
-    return GestureDetector(
-      onTap: _con.goToRegister,
-      child: Container(
-        padding: EdgeInsets.all(15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "¿No tienes cuenta? ",
-              style: TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
-            Text(
-              "Regístrate",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: utilscolor.Colors.colorAccent,
-                fontSize: 16.0,
-              ),
-            ),
-          ],
-        ),
+  Widget _buttonRegister() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+      child: ButtonApp(
+        onPressed: () {
+          _con.register();
+        },
+        text: "Registrar ahora",
+        color: utilscolor.Colors.colorAccent,
       ),
     );
   }
