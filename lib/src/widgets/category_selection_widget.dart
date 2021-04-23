@@ -80,6 +80,7 @@ class _CategorySelectionWidgetState extends State<CategorySelectionWidget> {
       );
     });
     return ListView(
+      physics: BouncingScrollPhysics(),
       scrollDirection: Axis.horizontal,
       children: widgets,
     );

@@ -46,7 +46,7 @@ class _GraphWidgetState extends State<GraphWidget> {
     List<Series<double, num>> series = [
       Series<double, int>(
         id: 'Gasto',
-        colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+        colorFn: (_, __) => MaterialPalette.indigo.shadeDefault,
         domainFn: (value, index) => index,
         measureFn: (value, _) => value,
         data: widget.data,
@@ -56,7 +56,7 @@ class _GraphWidgetState extends State<GraphWidget> {
 
     return LineChart(
       series,
-      animate: false,
+      animate: true,
       selectionModels: [
         SelectionModelConfig(
           type: SelectionModelType.info,

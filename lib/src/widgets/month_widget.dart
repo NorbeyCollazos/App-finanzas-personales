@@ -1,3 +1,4 @@
+import 'package:app_finanzas_personales/src/pages/detailgastos/detail_gastos_page.dart';
 import 'package:app_finanzas_personales/src/pages/gastos/gastos_controller.dart';
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,8 +13,9 @@ class MonthWidget extends StatefulWidget {
   final double total;
   final List<double> perDay;
   final Map<String, double> categories;
+  final int month;
 
-  MonthWidget({Key key, this.documents})
+  MonthWidget({Key key, this.documents, this.month})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
         perDay = List.generate(30, (int index) {
           return documents
@@ -80,7 +82,7 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _graph() {
     return Container(
-      height: 250.0,
+      height: 200.0,
       child: GraphWidget(
         data: widget.perDay,
       ),
@@ -94,10 +96,12 @@ class _MonthWidgetState extends State<MonthWidget> {
       child: Card(
         child: ListTile(
           onTap: () {
-            Navigator.of(context).pushNamed('/details');
+            Navigator.of(context).pushNamed('/details',
+                arguments: DetailsParams(name, widget.month));
           },
           leading: Icon(
             icon,
+            color: utilscolor.Colors.colorAccent,
             size: 35,
           ),
           title: Text(

@@ -54,6 +54,11 @@ class AuthProvider {
     return true;
   }
 
+  Future<bool> forgotPass(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+    return true;
+  }
+
   Future<void> signOut() async {
     return Future.wait([_firebaseAuth.signOut()]);
   }

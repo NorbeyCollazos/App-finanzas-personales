@@ -1,9 +1,11 @@
+import 'package:app_finanzas_personales/src/providers/formatter_value.dart';
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 import 'package:app_finanzas_personales/src/widgets/button_app.dart';
 import 'package:app_finanzas_personales/src/widgets/category_selection_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -18,9 +20,16 @@ class AddGastosPage extends StatefulWidget {
 
 class _AddGastosPageState extends State<AddGastosPage> {
   NumberFormat f = new NumberFormat("#,##0", "es_CO");
+  String dateStr = "Hoy";
+  DateTime date = DateTime.now();
+
   String category;
   int value = 0;
   AddGastosController _con = new AddGastosController();
+
+  static const _locale = 'en';
+  String _formatNumber(String s) =>
+      NumberFormat.decimalPattern(_locale).format(int.parse(s));
 
   @override
   void initState() {
@@ -34,25 +43,34 @@ class _AddGastosPageState extends State<AddGastosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _con.key,
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Registrar Gasto"),
+      ),
       body: _body(),
     );
   }
 
   Widget _body() {
-    return Column(
-      children: [
-        _categorySelector(),
-        _currentValue(),
-        _numpad(),
-        // _submit(),
-        _btnSubmit()
-      ],
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          _categorySelector(),
+          _currentValue(),
+          _textfieldValue(),
+          _textfieldDescription(),
+          _botonFecha(),
+          //_numpad(),
+          // _submit(),
+          _btnSubmit()
+        ],
+      ),
     );
   }
 
   _categorySelector() {
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 10.0),
       height: 120,
       child: CategorySelectionWidget(
         categories: {
@@ -79,6 +97,7 @@ class _AddGastosPageState extends State<AddGastosPage> {
       padding: const EdgeInsets.symmetric(vertical: 32.0),
       child: Text(
         "\$${f.format(value)}",
+        //_con.mostrarValue(),
         style: TextStyle(
           fontSize: 50.0,
           color: utilscolor.Colors.colorAccent,
@@ -88,112 +107,36 @@ class _AddGastosPageState extends State<AddGastosPage> {
     );
   }
 
-  Widget _num(String text, double height) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        setState(() {
-          if (text == ",") {
-            value = value * 100;
-          } else {
-            value = value * 10 + int.parse(text);
-          }
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.all(2),
-        height: height,
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.grey,
-            ),
-          ),
+  Widget _botonFecha() {
+    return Container(
+      alignment: Alignment.topLeft,
+      margin: EdgeInsets.symmetric(horizontal: 35),
+      child: RaisedButton.icon(
+        onPressed: () {
+          showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now().subtract(Duration(hours: 24 * 60)),
+            lastDate: DateTime.now(),
+          ).then((newDate) {
+            if (newDate != null) {
+              setState(() {
+                date = newDate;
+                dateStr =
+                    "${date.day.toString()}/${date.month.toString()}/${date.year.toString()}";
+              });
+            }
+          });
+        },
+        icon: Icon(
+          FontAwesomeIcons.calendarDay,
+          color: Colors.grey,
         ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
-            new BoxShadow(
-              color: Colors.grey,
-              offset: new Offset(0.0, 5.0),
-              blurRadius: 3.0,
-            ),
-          ],
+        label: Text(
+          dateStr,
+          style: TextStyle(color: Colors.grey),
         ),
       ),
-    );
-  }
-
-  Widget _numpad() {
-    return Expanded(
-      child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        var height = constraints.biggest.height / 4.3;
-
-        return Table(
-          /*border: TableBorder.all(
-            color: Colors.grey,
-            width: 1.0,
-          ),*/
-          children: [
-            TableRow(children: [
-              _num("1", height),
-              _num("2", height),
-              _num("3", height),
-            ]),
-            TableRow(children: [
-              _num("4", height),
-              _num("5", height),
-              _num("6", height),
-            ]),
-            TableRow(children: [
-              _num("7", height),
-              _num("8", height),
-              _num("9", height),
-            ]),
-            TableRow(children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    value = 0;
-                  });
-                },
-                child: Container(
-                  height: height,
-                  child: Center(
-                    child: Icon(
-                      Icons.cancel,
-                      color: Colors.grey,
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ),
-              _num("0", height),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    value = value ~/ 10;
-                  });
-                },
-                child: Container(
-                  height: height,
-                  child: Center(
-                    child: Icon(
-                      Icons.backspace,
-                      color: Colors.grey,
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ),
-            ]),
-          ],
-        );
-      }),
     );
   }
 
@@ -202,7 +145,8 @@ class _AddGastosPageState extends State<AddGastosPage> {
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
       child: ButtonApp(
         onPressed: () {
-          _con.registrarGasto(value, category);
+          _con.registrarGasto(value, category, date);
+          print(date);
         },
         text: "Registrar Gasto",
         color: utilscolor.Colors.colorAccent,
@@ -211,7 +155,64 @@ class _AddGastosPageState extends State<AddGastosPage> {
     );
   }
 
-  Widget _submit() {
+  Widget _textfieldValue() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: TextField(
+        controller: _con.valueController,
+        keyboardType: TextInputType.number,
+        /*onChanged: (string) {
+          string = '${_formatNumber(string.replaceAll(',', ''))}';
+          _con.valueController.value = TextEditingValue(
+            text: string,
+            selection: TextSelection.collapsed(offset: string.length),
+          );
+        },*/
+        onChanged: (text) {
+          //print("Valor: $value");
+          setState(() {
+            if (text == "") {
+              value = 0;
+            }
+            value = int.parse(text);
+          });
+        },
+        decoration: InputDecoration(
+          hintText: "ingrese el valor",
+          labelText: "Valor",
+          border: new OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+            borderSide: new BorderSide(
+              color: Colors.teal,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textfieldDescription() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: TextField(
+        controller: _con.descriptionController,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: InputDecoration(
+          hintText: "Ingrese la descripción",
+          labelText: "Descripción (opcional)",
+          border: new OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+            borderSide: new BorderSide(
+              color: Colors.teal,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /* Widget _submit() {
     return Builder(builder: (BuildContext context) {
       return Hero(
         tag: "add_button",
@@ -260,5 +261,9 @@ class _AddGastosPageState extends State<AddGastosPage> {
         ),
       );
     });
+  }*/
+
+  void refresh() {
+    setState(() {});
   }
 }
