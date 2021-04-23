@@ -1,11 +1,10 @@
 import 'package:app_finanzas_personales/src/utils/shared_pref.dart';
-import 'package:app_finanzas_personales/src/widgets/month_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class GastosController {
+class IngresosController {
   BuildContext context;
   int currentPage = DateTime.now().month - 1;
   Stream<QuerySnapshot> _query;
@@ -19,12 +18,12 @@ class GastosController {
     _idUser = await _sharedPref.read('idUser');
   }
 
-  void goToAddGastos() {
-    Navigator.pushNamed(context, 'addGastos');
+  void goToAddIngresos() {
+    Navigator.pushNamed(context, 'addIngresos');
   }
 
-  void goToIngresos() {
-    Navigator.pushNamed(context, 'ingresos');
+  void goToGastos() {
+    Navigator.pushNamed(context, 'gastos');
   }
 
   Future<String> prefIdUser() async {
@@ -51,9 +50,6 @@ class GastosController {
     if (key == "Gimnasio") icon = FontAwesomeIcons.biking;
     if (key == "Regalos") icon = FontAwesomeIcons.gift;
     if (key == "Otros") icon = FontAwesomeIcons.plus;
-    if (key == "Salario") icon = FontAwesomeIcons.handHoldingUsd;
-    if (key == "Intereses") icon = FontAwesomeIcons.university;
-    if (key == "Ahorros") icon = FontAwesomeIcons.piggyBank;
 
     return icon;
   }

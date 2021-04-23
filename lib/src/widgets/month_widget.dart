@@ -1,4 +1,5 @@
 import 'package:app_finanzas_personales/src/pages/detailgastos/detail_gastos_page.dart';
+import 'package:app_finanzas_personales/src/pages/detailingresos/detail_ingresos_page.dart';
 import 'package:app_finanzas_personales/src/pages/gastos/gastos_controller.dart';
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,8 +15,9 @@ class MonthWidget extends StatefulWidget {
   final List<double> perDay;
   final Map<String, double> categories;
   final int month;
+  final String titulo;
 
-  MonthWidget({Key key, this.documents, this.month})
+  MonthWidget({Key key, this.documents, this.month, this.titulo})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
         perDay = List.generate(30, (int index) {
           return documents
@@ -70,7 +72,7 @@ class _MonthWidgetState extends State<MonthWidget> {
           ),
         ),
         Text(
-          "Total en gastos",
+          "Total en " + widget.titulo,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16.0,
@@ -96,8 +98,13 @@ class _MonthWidgetState extends State<MonthWidget> {
       child: Card(
         child: ListTile(
           onTap: () {
-            Navigator.of(context).pushNamed('/details',
-                arguments: DetailsParams(name, widget.month));
+            if (widget.titulo == "Ingresos") {
+              Navigator.of(context).pushNamed('/detailsIngresos',
+                  arguments: DetailsIngresosParams(name, widget.month));
+            } else {
+              Navigator.of(context).pushNamed('/details',
+                  arguments: DetailsParams(name, widget.month));
+            }
           },
           leading: Icon(
             icon,

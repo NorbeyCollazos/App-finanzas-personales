@@ -1,6 +1,7 @@
-import 'package:app_finanzas_personales/src/pages/gastos/gastos_controller.dart';
+import 'package:app_finanzas_personales/src/pages/ingresos/ingresos_controller.dart';
 import 'package:app_finanzas_personales/src/providers/auth_provider.dart';
-import 'package:app_finanzas_personales/src/providers/gastos_provider.dart';
+import 'package:app_finanzas_personales/src/providers/ingresos_provider.dart';
+
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 import 'package:app_finanzas_personales/src/utils/shared_pref.dart';
 import 'package:app_finanzas_personales/src/widgets/month_widget.dart';
@@ -9,15 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
-class GastosPage extends StatefulWidget {
-  GastosPage({Key key}) : super(key: key);
+class IngresosPage extends StatefulWidget {
+  IngresosPage({Key key}) : super(key: key);
 
   @override
-  _GastosPageState createState() => _GastosPageState();
+  _IngresosPageState createState() => _IngresosPageState();
 }
 
-class _GastosPageState extends State<GastosPage> {
-  GastosController _con = new GastosController();
+class _IngresosPageState extends State<IngresosPage> {
+  IngresosController _con = new IngresosController();
   PageController _controller;
   int currentPage = DateTime.now().month - 1;
   Stream<QuerySnapshot> _query;
@@ -36,7 +37,7 @@ class _GastosPageState extends State<GastosPage> {
     _sharedPref = new SharedPref();
     _authProvider = new AuthProvider();
 
-    db = GastosRepository(_authProvider.getUser().uid);
+    db = IngresosRepository(_authProvider.getUser().uid);
 
     _query = db.queryByMonth(currentPage + 1);
 
@@ -57,11 +58,10 @@ class _GastosPageState extends State<GastosPage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _bottomAction('assets/img/ic_gastos.png', 45.0, 500, () {}),
-            _bottomAction('assets/img/ic_ingresos.png', 50.0, 150, () {
-              _con.goToIngresos();
-              print("ir a ingresos");
+            _bottomAction('assets/img/ic_gastos.png', 45.0, 150, () {
+              _con.goToGastos();
             }),
+            _bottomAction('assets/img/ic_ingresos.png', 50.0, 500, () {}),
             _bottomAction('assets/img/ic_info.png', 35.0, 150, () {}),
             SizedBox(
               width: 32.0,
@@ -72,7 +72,7 @@ class _GastosPageState extends State<GastosPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: _con.goToAddGastos,
+        onPressed: _con.goToAddIngresos,
       ),
       body: _body(),
     );
@@ -105,7 +105,7 @@ class _GastosPageState extends State<GastosPage> {
               return MonthWidget(
                 documents: data.data.docs,
                 month: currentPage,
-                titulo: "Gastos",
+                titulo: "Ingresos",
               );
             } else {
               return Expanded(
@@ -117,7 +117,7 @@ class _GastosPageState extends State<GastosPage> {
                     height: 80,
                   ),
                   Text(
-                    "No hay gastos registrados en este mes, pulsa en el botón + para agregar",
+                    "No hay Ingresos registrados en este mes, pulsa en el botón + para agregar",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16.0,

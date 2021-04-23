@@ -1,11 +1,13 @@
 import 'package:app_finanzas_personales/src/pages/addgastos/add_gastos_page.dart';
+import 'package:app_finanzas_personales/src/pages/addingresos/add_ingresos_page.dart';
 import 'package:app_finanzas_personales/src/pages/detailgastos/detail_gastos_page.dart';
+import 'package:app_finanzas_personales/src/pages/detailingresos/detail_ingresos_page.dart';
 import 'package:app_finanzas_personales/src/pages/gastos/gastos_page.dart';
 import 'package:app_finanzas_personales/src/pages/home/home_page.dart';
+import 'package:app_finanzas_personales/src/pages/ingresos/ingresos_page.dart';
 import 'package:app_finanzas_personales/src/pages/login/login_page.dart';
 import 'package:app_finanzas_personales/src/pages/register/register_page.dart';
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +40,16 @@ class MyApp extends StatelessWidget {
             },
           );
         }
+        if (settings.name == '/detailsIngresos') {
+          DetailsIngresosParams params = settings.arguments;
+          return MaterialPageRoute(
+            builder: (BuildContext context) {
+              return DetailsIngresosPage(
+                params: params,
+              );
+            },
+          );
+        }
       },
       routes: {
         'login': (BuildContext context) => LoginPage(),
@@ -45,6 +57,8 @@ class MyApp extends StatelessWidget {
         'home': (BuildContext context) => HomePage(),
         'gastos': (BuildContext context) => GastosPage(),
         'addGastos': (BuildContext context) => AddGastosPage(),
+        'ingresos': (BuildContext context) => IngresosPage(),
+        'addIngresos': (BuildContext context) => AddIngresosPage(),
       },
     );
   }
