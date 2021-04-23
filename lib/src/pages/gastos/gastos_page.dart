@@ -60,9 +60,10 @@ class _GastosPageState extends State<GastosPage> {
             _bottomAction('assets/img/ic_gastos.png', 45.0, 500, () {}),
             _bottomAction('assets/img/ic_ingresos.png', 50.0, 150, () {
               _con.goToIngresos();
-              print("ir a ingresos");
             }),
-            _bottomAction('assets/img/ic_info.png', 35.0, 150, () {}),
+            _bottomAction('assets/img/ic_info.png', 35.0, 150, () {
+              _con.goToInfo();
+            }),
             SizedBox(
               width: 32.0,
             ),

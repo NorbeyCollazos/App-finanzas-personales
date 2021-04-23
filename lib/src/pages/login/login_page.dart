@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             _icono(),
             _textfieldEmail(),
             _textfieldPassword(),
+            _textOlvidoPass(),
             _buttonLogin(),
             _textNoCuenta(),
           ],
@@ -47,11 +48,11 @@ class _LoginPageState extends State<LoginPage> {
     return ClipPath(
       clipper: WaveClipperOne(),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.25,
+        height: 150,
         color: utilscolor.Colors.colorPrimary,
         child: Center(
             child: Text(
-          "Finanzas Personales",
+          "Iniciar sesión",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -63,7 +64,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _icono() {
-    return Image.asset('assets/img/icono.png');
+    return Image.asset(
+      'assets/img/icono.png',
+      width: 150.0,
+    );
   }
 
   Widget _textfieldEmail() {
@@ -111,6 +115,23 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.teal,
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _textOlvidoPass() {
+    return GestureDetector(
+      onTap: () {
+        _con.goToForgotPass();
+      },
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        padding: EdgeInsets.all(5),
+        child: Text(
+          "¿Olvidaste tu contraseña?",
+          textAlign: TextAlign.end,
         ),
       ),
     );

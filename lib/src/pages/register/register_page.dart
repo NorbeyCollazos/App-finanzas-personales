@@ -46,7 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return ClipPath(
       clipper: WaveClipperOne(),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.15,
+        height: 150,
         color: utilscolor.Colors.colorPrimary,
         child: Center(
             child: Text(

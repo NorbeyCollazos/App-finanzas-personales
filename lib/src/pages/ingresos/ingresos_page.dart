@@ -62,7 +62,9 @@ class _IngresosPageState extends State<IngresosPage> {
               _con.goToGastos();
             }),
             _bottomAction('assets/img/ic_ingresos.png', 50.0, 500, () {}),
-            _bottomAction('assets/img/ic_info.png', 35.0, 150, () {}),
+            _bottomAction('assets/img/ic_info.png', 35.0, 150, () {
+              _con.goToInfo();
+            }),
             SizedBox(
               width: 32.0,
             ),

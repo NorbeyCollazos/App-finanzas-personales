@@ -15,7 +15,7 @@ class AuthProvider {
   void checkIfUserIsLogged(BuildContext context) {
     FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user != null) {
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, 'gastos', (route) => false);
       }
     });
   }
@@ -55,7 +55,17 @@ class AuthProvider {
   }
 
   Future<bool> forgotPass(String email) async {
-    await _firebaseAuth.sendPasswordResetEmail(email: email);
+    String errorMessage;
+
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (error) {
+      print(error);
+      errorMessage = error.code;
+    }
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
     return true;
   }
 

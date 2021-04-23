@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomeController {
+class InfoController {
   BuildContext context;
   Function refresh;
 
@@ -55,5 +55,9 @@ class HomeController {
 
   void goToGastos() {
     Navigator.pushNamed(context, 'gastos');
+  }
+
+  void goToIngresos() {
+    Navigator.pushNamed(context, 'ingresos');
   }
 }

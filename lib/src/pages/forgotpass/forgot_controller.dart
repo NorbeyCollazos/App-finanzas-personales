@@ -3,7 +3,7 @@ import 'package:app_finanzas_personales/src/utils/snackbar.dart' as utils;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginController {
+class ForgotController {
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
 
@@ -22,43 +22,42 @@ class LoginController {
     Navigator.pushNamed(context, 'register');
   }
 
-  void goToGastos() {
-    Navigator.pushNamedAndRemoveUntil(context, 'gastos', (route) => false);
+  void goToHome() {
+    Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
   }
 
   void goToForgotPass() {
     Navigator.pushNamed(context, 'forgotpass');
   }
 
-  void login() async {
+  void forgotPass() async {
     String email = emailController.text.trim();
-    String password = passwordController.text.trim();
 
     if (email.isEmpty) {
       utils.Snackbar.showSnackbar(
           context, key, 'Por favor ingrese el correo', Colors.amber);
       return;
     }
-    if (password.isEmpty) {
-      utils.Snackbar.showSnackbar(
-          context, key, 'Por favor ingrese la contraseña', Colors.amber);
-      return;
-    }
 
     print("Email: $email");
-    print("Password: $password");
 
     //_progressDialog.show();
 
     try {
-      bool isLogin = await _authProvider.login(email, password);
+      bool isForgot = await _authProvider.forgotPass(email);
       //_progressDialog.hide();
-      if (isLogin) {
+      if (isForgot) {
         //_progressDialog.hide();
-        print('Esta logueado');
-        goToGastos();
+        utils.Snackbar.showSnackbar(
+            context,
+            key,
+            'Se envió la solicitud al correo, por favor revice su bandeja de entrada',
+            Colors.green);
+        Navigator.of(context).pop();
       } else {
-        print('No se pudo autenticar');
+        print('No se pudo enviar la solicitud');
+        utils.Snackbar.showSnackbar(
+            context, key, 'No se pudo enviar la solicitud', Colors.amber);
         // _progressDialog.hide();
       }
     } catch (error) {

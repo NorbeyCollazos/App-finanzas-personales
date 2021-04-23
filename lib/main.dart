@@ -2,8 +2,9 @@ import 'package:app_finanzas_personales/src/pages/addgastos/add_gastos_page.dart
 import 'package:app_finanzas_personales/src/pages/addingresos/add_ingresos_page.dart';
 import 'package:app_finanzas_personales/src/pages/detailgastos/detail_gastos_page.dart';
 import 'package:app_finanzas_personales/src/pages/detailingresos/detail_ingresos_page.dart';
+import 'package:app_finanzas_personales/src/pages/forgotpass/forgot_page.dart';
 import 'package:app_finanzas_personales/src/pages/gastos/gastos_page.dart';
-import 'package:app_finanzas_personales/src/pages/home/home_page.dart';
+import 'package:app_finanzas_personales/src/pages/info/info_page.dart';
 import 'package:app_finanzas_personales/src/pages/ingresos/ingresos_page.dart';
 import 'package:app_finanzas_personales/src/pages/login/login_page.dart';
 import 'package:app_finanzas_personales/src/pages/register/register_page.dart';
@@ -54,11 +55,12 @@ class MyApp extends StatelessWidget {
       routes: {
         'login': (BuildContext context) => LoginPage(),
         'register': (BuildContext context) => RegisterPage(),
-        'home': (BuildContext context) => HomePage(),
+        'forgotpass': (BuildContext context) => ForgotPage(),
         'gastos': (BuildContext context) => GastosPage(),
         'addGastos': (BuildContext context) => AddGastosPage(),
         'ingresos': (BuildContext context) => IngresosPage(),
         'addIngresos': (BuildContext context) => AddIngresosPage(),
+        'info': (BuildContext context) => InfoPage(),
       },
     );
   }

@@ -26,6 +26,10 @@ class IngresosController {
     Navigator.pushNamed(context, 'gastos');
   }
 
+  void goToInfo() {
+    Navigator.pushNamed(context, 'info');
+  }
+
   Future<String> prefIdUser() async {
     String _id = await _sharedPref.read('idUser');
     return _id;
