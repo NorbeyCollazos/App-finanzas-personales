@@ -2,6 +2,7 @@ import 'package:app_finanzas_personales/src/models/person.dart';
 import 'package:app_finanzas_personales/src/providers/auth_provider.dart';
 import 'package:app_finanzas_personales/src/providers/user_provider.dart';
 import 'package:app_finanzas_personales/src/utils/shared_pref.dart';
+import 'package:app_finanzas_personales/src/widgets/alert_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,5 +60,18 @@ class InfoController {
 
   void goToIngresos() {
     Navigator.pushNamed(context, 'ingresos');
+  }
+
+  void showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertApp(
+          titulo: "Cerrar sesión",
+          texto: "¿Seguro desea cerrar sesión?",
+          onPressed: cerrarSesion,
+        );
+      },
+    );
   }
 }

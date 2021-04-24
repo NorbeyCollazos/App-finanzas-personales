@@ -11,6 +11,7 @@ class GastosRepository {
         .doc(userId)
         .collection('Gastos')
         .where("month", isEqualTo: month)
+        .where("year", isEqualTo: DateTime.now().year)
         .where("category", isEqualTo: categoryName)
         .snapshots();
   }
@@ -21,6 +22,7 @@ class GastosRepository {
         .doc(userId)
         .collection('Gastos')
         .where("month", isEqualTo: month)
+        .where("year", isEqualTo: DateTime.now().year)
         .snapshots();
   }
 

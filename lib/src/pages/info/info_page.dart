@@ -1,9 +1,13 @@
 import 'package:app_finanzas_personales/src/pages/info/info_controller.dart';
+import 'package:app_finanzas_personales/src/widgets/alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+const _url = 'https://ncrdesarrollo.com/';
 
 class InfoPage extends StatefulWidget {
   InfoPage({Key key}) : super(key: key);
@@ -108,7 +112,7 @@ class _InfoPageState extends State<InfoPage> {
             ),
             RaisedButton.icon(
               onPressed: () {
-                _con.cerrarSesion();
+                _con.showAlertDialog();
               },
               icon: Icon(
                 FontAwesomeIcons.powerOff,
@@ -164,13 +168,28 @@ class _InfoPageState extends State<InfoPage> {
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
       child: Column(
         children: [
-          Text("Desarrollador"),
-          Text("Norbey Collazos Ramirez"),
-          Text("ncrdesarrollo.com"),
+          Text("Desarrollado por"),
+          GestureDetector(
+            onTap: () => _launchURL(),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "ncrdesarrollo.com",
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+
+  void _launchURL() async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   void refresh() {
     setState(() {});

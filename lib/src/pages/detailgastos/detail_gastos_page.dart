@@ -1,6 +1,7 @@
 import 'package:app_finanzas_personales/src/providers/auth_provider.dart';
 import 'package:app_finanzas_personales/src/providers/gastos_provider.dart';
 import 'package:app_finanzas_personales/src/utils/colors.dart' as utilscolor;
+import 'package:app_finanzas_personales/src/widgets/alert_dialog.dart';
 import 'package:app_finanzas_personales/src/widgets/lista_dia_gasto.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +54,48 @@ class _DetailsPageState extends State<DetailsPage> {
               itemBuilder: (BuildContext context, int index) {
                 var document = data.data.docs[index];
                 return Dismissible(
-                  background: Container(color: Colors.red),
                   key: Key(document.documentID),
-                  onDismissed: (direction) {
-                    db.delete(document.documentID);
+                  //para el fondo
+                  background: Container(color: Colors.red),
+                  secondaryBackground: Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(Icons.delete, color: Colors.white),
+                          Text('Eliminar Gasto',
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  confirmDismiss: (direction) async {
+                    //return await showAlertDialog(document.documentID);
+                    return await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Eliminar Gasto"),
+                          content:
+                              const Text("¿Seguro desea eliminar este gasto?"),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                  db.delete(document.documentID);
+                                },
+                                child: const Text("Eliminar")),
+                            FlatButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text("Cancelar"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Card(
                     child: ListaDiaGasto(document: document, f: f),

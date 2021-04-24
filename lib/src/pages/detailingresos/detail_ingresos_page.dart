@@ -54,10 +54,46 @@ class _DetailsIngresosPageState extends State<DetailsIngresosPage> {
               itemBuilder: (BuildContext context, int index) {
                 var document = data.data.docs[index];
                 return Dismissible(
-                  background: Container(color: Colors.red),
                   key: Key(document.documentID),
-                  onDismissed: (direction) {
-                    db.delete(document.documentID);
+                  background: Container(color: Colors.red),
+                  secondaryBackground: Container(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(Icons.delete, color: Colors.white),
+                          Text('Eliminar Ingreso',
+                              style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  confirmDismiss: (direction) async {
+                    //return await showAlertDialog(document.documentID);
+                    return await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Eliminar Ingreso"),
+                          content: const Text(
+                              "¿Seguro desea eliminar este ingreso?"),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                  db.delete(document.documentID);
+                                },
+                                child: const Text("Eliminar")),
+                            FlatButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text("Cancelar"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Card(
                     child: ListaDiaGasto(document: document, f: f),
